@@ -1,1 +1,4 @@
 # RP2040 Rust template project
+This is a Rust project template that I made based on the RP2040 project template (https://github.com/rp-rs/rp2040-project-template). It was modified so that it now uses an RPzero which is functioning as a remote debugging tool.
+
+When the "Remote debug" profile is run, it first builds the Rust project, then transfers this to the RPzero via SSH (available through the "GDB Debugger - Beyond" tool). After connecting to the OpenOCD server that runs in a separate SSH shell, the RPpico is flashed and loaded, after which the VS Code debugger starts. Additionally, the DEFMT task connects to an RTT channel on which debugging messages can be read out.
