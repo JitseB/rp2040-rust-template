@@ -1,0 +1,65 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "rust: cargo build ARM",
+            "type": "cargo",
+            "command": "build",
+            "args": [
+                "--target=thumbv6m-none-eabi",
+                "--profile=dev"
+            ],
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": "build"
+        },
+        {
+            "label": "rust: remote ARM debug setup",
+            "type": "shell",
+            "command": "${workspaceFolder}/scripts/remote_debug.sh",
+            "args": [
+                "${workspaceFolder}",
+                "rpzero",
+                "3333"
+            ],
+            "group": "none",
+            "dependsOn": [
+                "rust: cargo build ARM",
+            ],
+        },
+        {
+            "label": "DEFMT",
+            "type": "process",
+            "command": "/bin/bash",
+            "args": [
+                "-lc",
+                "nc localhost 9090 | defmt-print -e ${workspaceFolder}/target/thumbv6m-none-eabi/debug/app"
+            ],
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": [
+                    {
+                        "regexp": "^(.*)$",
+                        "kind": "file",
+                        "file": 1,
+                        "message": 1
+                    }
+                ],
+                "background": {
+                    "activeOnStart": false,
+                    "beginsPattern": ".",
+                    "endsPattern": "."
+                }
+            },
+            "presentation": {
+                "panel": "dedicated",
+                "focus": false,
+                "echo": false,
+                "clear": true
+            }
+        }
+    ]
+}

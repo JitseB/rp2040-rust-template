@@ -1,0 +1,34 @@
+// The format of this file is specified in https://probe.rs/docs/tools/debugger/#start-a-debug-session-with-minimum-configuration
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "by-gdb",
+            "request": "launch",
+            "name": "Remote debug",
+            "program": "app",
+            "debuggerPath": " /usr/bin/gdb-multiarch",
+            "debuggerArgs": [
+                "--ex \"target extended-remote :3333\"",
+                "--ex \"flash\"",
+                "--ex \"load app\"",
+                "--ex \"file app\""
+            ],
+            "preLaunchTask": "rust: cargo build ARM",
+            "cwd": "${workspaceFolder}",
+            "ssh": {
+                "username": "boonstra",
+                "enabled": true,
+                "address": "rpzero",
+                "passwordType": "inputAndSave",
+                "timeout": 1000,
+                "transfer": [
+                    {
+                        "from": "${workspaceFolder}/target/thumbv6m-none-eabi/debug/app",
+                        "to": "/home/boonstra/app"
+                    }
+                ]
+            }
+        }
+    ]
+}
